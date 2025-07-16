@@ -155,7 +155,7 @@ The PIMA Indians Diabetes Dataset \cite{pimaDataset} was collected by the US Nat
 \subsubsection{BRFSS dataset.}
 
 This dataset was obtained manually by filtering and processing the 2022 BRFSS Survey Data \cite{BRFSS2022}. The \textbf{Behavioral Risk Factor Surveillance System (BRFSS)} is a large-scale ongoing health survey conducted by the Centers for Disease Control and Prevention (CDC) in the United States. Established in 1984, it collects self-reported data on health-related risk behaviors, chronic diseases and preventive health practices from adults through telephone interviews. BRFSS covers topics such as \textbf{smoking}, \textbf{alcohol use}, \textbf{physical activity}, \textbf{diet} or \textbf{chronic conditions}, making it one of the most comprehensive sources of public health data. The dataset is widely used for epidemiological research, policymaking and public health interventions. 
-To prepare data from the 2022 BRFSS survey for the prediction of diabetes, the dataset was first filtered to retain only the most relevant characteristics. The survey results comprise 445,132 records and include 326 variables. Given the large number of variables, a careful selection process was applied to keep the attributes that are the most likely to impact the risk of diabetes. This selection was based on previous research, focusing on factors that may be relevant in the prediction of diabetes. 
+To prepare data from the 2022 BRFSS survey for the prediction of diabetes, the dataset was first filtered to retain only the most relevant characteristics. The survey results comprise 445,132 records and include 326 variables. Given the large number of variables, a careful selection process was applied to keep the attributes that are the most likely to impact the risk of diabetes. This selection was based on previous research, focusing on factors that may be relevant in the prediction of diabetes. In addition, the selection prioritized clinical and behavioral features such as walking difficulty, heart or pulmonary disease and cancer, with less emphasis on demographic factors. 
 Filtering and transformation were performed using Python and the Pandas library. The raw dataset, initially in an XPT transport format, was processed into a clean CSV file that contained only the selected attributes. Unnecessary columns were dropped and categorical variables were standardized for consistency. The final version of the dataset consists of 444,045 instances (after preprocessing) and 15 attributes that are detailed in \autoref{tab:comp}. 
 In addition to the information provided in \autoref{tab:comp}, all categorical variables contain a third value: "7" that encloses "don't know / not sure" and "refuse" answers. 
 
@@ -237,12 +237,12 @@ In the next step, the following changes were applied:
 
 \subsection{Numerical experiments}
 
-\subsubsection{Environment}
+\subsubsection{Environment.}
 All experiments were conducted on a local LENOVO machine, running Microsoft Windows 10, equipped with an AMD Ryzen 5 3500U CPU, 8 GB RAM. The data processing steps and the experiments were implemented in Python 3.11.8, using a Jupyter Notebook environment. pandas (v1.3.5) and numpy (v1.26.4) libraries were used for data pre-processing, 
 scikit-learn (v1.4.1) and lightgbm (v4.5.0) for model training and
 matplotlib (v3.8.3) and seaborn (v0.13.2) for visualization.
 
-\subsubsection{Experiment 1 - PIMA dataset}
+\subsubsection{Experiment 1 - PIMA dataset.}
 
 On the PIMA dataset, the models were evaluated based on accuracy, precision, recall, F1 score on the test data. The runtime was also used to compare the models. The runtime is measured in milliseconds and includes only the model training time. 
 The evaluation of ML models on the PIMA dataset is presented in \autoref{table:PIMA_results} and reveals that the RFC achieved the highest accuracy (74\%), along with strong precision, recall and F1 scores, making it the best performing model in terms of predictive power. Additionally, it maintained a low run-time of 359 milliseconds (0.4 seconds), balancing both efficiency and effectiveness.
@@ -338,7 +338,7 @@ Another relevant study \cite{GANIE2022100092}, although based on a different dat
 In that study, weight was assigned an importance of 23\%, being the second most important feature after urination. Height had a minimal influence of 0.03\% and gender was found to be completely insignificant (0\% importance). 
 In comparison, if the LGBM gain-based feature importance values (\autoref{fig:lightGBM_gain_features}) were normalized to sum 1,  weight would be similarly influential at 21.26\%, while height played a much larger role at 7.11\%. Additionally, while gender was still relatively irrelevant in both studies, it held slightly higher weight in the current analysis (1.00\%). These variations suggest that although some feature rankings remain consistent across studies, differences in dataset composition, feature engineering and model selection can significantly affect the perceived importance of individual variables.
 
-\subsubsection{Experiment 4 - Class weights} 
+\subsubsection{Experiment 4 - Class weights.} 
 \label{section:exp_4}
 One of the challenges in training ML models on the BRFSS dataset is the imbalance between the two classes. Out of 444.045 total respondents, only 61.158 have diabetes, while the remaining 382.887 do not. This imbalance can lead to biased models that favor the majority class, reducing the model's ability to predict diabetes. To avoid this problem, the \textbf{class weighting} was applied. Class weighting is a technique that adjusts the model's learning process by assigning higher importance to underrepresented classes.
 \cite{classWeights2023}. 
@@ -348,7 +348,7 @@ In \autoref{table:allExp} (column 3) are described new computed evaluation metri
 After applying class weights to the models that support them (RFC, DTC and LGBM), results showed that this approach did not significantly improve accuracy. RFC maintained nearly the same accuracy of 80\%, while both LGBM and DTC saw a slight decrease in performance. However, an interesting observation is the significant reduction in terms of run-time. The training time was almost halved for LGBM and DTC. This suggests that class weighting may introduce regularization effects, reducing overfitting and allowing models to converge faster.
 
 
-\subsubsection{Experiment 5 - Resampling}
+\subsubsection{Experiment 5 - Resampling.}
 \label{section:exp_5}
 Considering the fact that applying class weights did not improve the performance of the models, another feasible solution is \textbf{resampling}.
 This method involves adjusting the balance between minority and majority classes through up-sampling or down-sampling. In the case of an imbalanced dataset, \textbf{oversampling} involves generating synthetic records for the minority class while \textbf{undersampling} entails removing rows from the majority class. 
@@ -393,7 +393,7 @@ In order to ensure a consistent comparison, a single test set was used to evalua
 It can be observed in the matrices that there is a small improvement from the original model to the models trained on the oversampled data, especially in terms of true positives: increasing from 2.34\% to 4.05\%  in ADASYN and to 5.08\% in SMOTE. Despite this apparent improvement, the measurements presented in \autoref{table:allExp} show a significant decrease in the all five evaluation metrics.
 
 
-\subsubsection{Experiment 6 - Feature selection}
+\subsubsection{Experiment 6 - Feature selection.}
 \label{section:exp_6}
 Feature selection can be a crucial step in ML aiming to reduce dimensionality, improve model accuracy and enhance model efficiency \cite{BARBIERI2024123667}. In this study, SelectKBest is used for feature selection along with a manual selection based on feature importance scores computed by DTC. \textbf {SelectKBest} is a univariate feature selection method that selects the top \textbf{k} features based on statistical scoring.  SelectKBest is a filter-based feature selection method; the feature selection process is carried out independently of any specific ML algorithm \cite{selectkbest}. Instead, it relies on statistical measures to score and rank features.
 This technique helps to retain only the most relevant features, eliminating those that have a minimal impact on the prediction of diabetes. 
@@ -426,12 +426,12 @@ While both feature selection techniques (SelectKBest and best features from DT) 
 
 The results indicate that RFC and DTC achieved their highest accuracy when trained on the top five features selected by SelectKBest. However, increasing the number of features to 10 or using the complete set of 14 features (\autoref{table:allExp}, column 2) led to a slight decline in performance for these models. However, LGBM's accuracy remained stable across different feature sets, demonstrating its robustness. Although it cannot reach its initial accuracy of  86.5\%, LGBM maintains a high accuracy value of 86.2\%. 
 
-\subsubsection{Discussion}
-This study aimed to predict the diabetes risk using ML techniques and to identify the key factors that influence diabetes. LightGBM emerged as the most accurate model, achieving the highest scores in all experiments. The results offer a response for the first RQ, confirming that LGBM is the model that balances the best speed and accuracy. 
+\subsubsection{Discussion.}
+This study aimed to predict the risk of diabetes using ML techniques and to identify key factors that influence diabetes. LightGBM emerged as the most accurate model, achieving the highest scores in all experiments. The results offer a response for the first RQ, confirming that LGBM is the model that balances the best speed and accuracy. 
 
-Applying class weights (\autoref{section:exp_4}) or resampling methods (\autoref{section:exp_5} did not improve the performance of the models. On the other hand, in the feature selection experiment, the models performed at least as well as, or better than in the simple setup. Although the metrics for RFC and DTC improved after feature selection, LightGBM proved to be the most efficient model, maintaining the highest values. These findings directly address the third and fourth RQs by demonstrating that only the feature selection experiment had a positive impact on models performance.
+Applying class weights (\autoref{section:exp_4}) or resampling methods (\autoref{section:exp_5} did not improve the performance of the models. On the other hand, in the feature selection experiment, the models performed at least as well as, or better than, in the simple setup. Although the metrics for RFC and DTC improved after feature selection, LightGBM proved to be the most efficient model, maintaining the highest values. These findings directly address the third and fourth RQs by demonstrating that only the feature selection experiment had a positive impact on model performance.
 
-The feature importance analysis was realized for each model that supports feature scoring. The results differ from one model to another due to the way each model evaluates the contribution of the features. Across all models, \textbf{weight} and \textbf{height} are repeatedly ranked among the top five features. Besides these, features like \textbf{walking difficulty}, \textbf{sleep time} or \textbf{kidney disease} are identified as important features in most of the models. This analysis provides an answer to the second RQ by revealing some common influential features identified across all models despite the differences. 
+The feature importance analysis was performed for each model that supports feature scoring. The results differ from one model to another because of the way each model evaluates the contribution of the features. Across all models, \textbf{weight} and \textbf{height} are repeatedly ranked among the top five features. Besides these, features like \textbf{walking difficulty}, \textbf{sleep time} or \textbf{kidney disease} are identified as important features in most of the models. This analysis provides an answer to the second RQ by revealing some common influential features identified across all models despite differences. 
 
 \begin{table}
     \centering
